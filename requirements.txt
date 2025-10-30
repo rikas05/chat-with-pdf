@@ -1,0 +1,59 @@
+# =========================
+# FastAPI + Server
+# =========================
+fastapi
+uvicorn[standard]
+python-multipart
+python-dotenv
+
+# =========================
+# Frontend UI
+# =========================
+gradio
+requests
+
+# =========================
+# LangChain Ecosystem
+# =========================
+langchain
+langchain-core
+langchain-community
+langchain-text-splitters
+langchain-huggingface
+langchain-classic
+langchain-openai
+# langchain-chains is deprecated — keep this line commented
+# langchain-chains
+
+# =========================
+# Hugging Face + ML (Smaller Models)
+# =========================
+transformers
+torch
+accelerate
+sentence-transformers
+huggingface-hub
+
+# =========================
+# Vector Store
+# =========================
+faiss-cpu
+
+# =========================
+# PDF Processing
+# =========================
+pypdf
+
+# =========================
+# Data Handling
+# =========================
+pydantic
+numpy
+scikit-learn
+
+# =========================
+# Additional Dependencies
+# =========================
+protobuf
+sentencepiece
+bitsandbytes  # For quantized models
