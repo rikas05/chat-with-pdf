@@ -1,103 +1,104 @@
-# Chat with PDF using Local LLM (FLAN-T5)
+# PDF Chat Assistant with LangChain and Groq API
 
-This project lets you upload any PDF and ask questions about its content using a locally hosted generative model — no API keys required!
+This project is a high-performance PDF chat assistant that allows you to have interactive conversations with your PDF documents. It leverages the speed of the Groq API for real-time responses and the power of LangChain for robust conversational AI. The application is built with a Streamlit frontend and a FastAPI backend.
 
-## 🧠 Features
+## Features
 
-- Upload and chat with your PDF
-- Uses `flan-t5-base` (free, instruction-tuned model from HuggingFace)
-- Fully local — no internet connection or OpenAI key needed
-- Built with LangChain, FAISS, HuggingFace, and Streamlit
+- **Interactive PDF Chat**: Upload a PDF and ask questions about its content.
+- **Fast Responses**: Powered by the Groq API for near-instant answers.
+- **Source Referencing**: Identifies the parts of the PDF used to generate a response.
+- **Conversational Memory**: Maintains context throughout the conversation.
+- **Easy-to-use Interface**: Simple and intuitive UI built with Streamlit.
+- **Decoupled Frontend/Backend**: Scalable architecture with a FastAPI backend for processing and a Streamlit frontend for user interaction.
 
-## 📁 Files
+## Tech Stack
 
-- `app.py`: Streamlit frontend (full chat interface)
-- `app_simple.py`: Simplified version (if you encounter WebSocket issues)
-- `pdf_processor.py`: PDF reading and vector storage
-- `qa_chain.py`: Question Answering logic using local FLAN-T5
-- `requirements.txt`: Project dependencies
-- `fix_websocket.ps1`: PowerShell script to fix WebSocket issues
-- `run_app.bat`: Windows batch file to run the app
+- **Frontend**: [Streamlit](https://streamlit.io/)
+- **Backend**: [FastAPI](https://fastapi.tiangolo.com/)
+- **Conversational AI**: [LangChain](https://www.langchain.com/)
+- **Language Model**: [Groq](https://groq.com/)
+- **Embeddings**: [Hugging Face](https://huggingface.co/) (Sentence Transformers)
+- **Vector Store**: [FAISS](https://github.com/facebookresearch/faiss)
 
-## 🚀 How to Run
+## Prerequisites
 
-### Option 1: Quick Fix for WebSocket Issues (Recommended)
+- Python 3.8+
+- `pip` package manager
 
-If you're experiencing WebSocket errors, run this PowerShell script:
+## Installation
 
-```powershell
-# Right-click on fix_websocket.ps1 and select "Run with PowerShell"
-# OR open PowerShell and run:
-.\fix_websocket.ps1
-```
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/pdf-chat-assistant.git
+    cd pdf-chat-assistant
+    ```
 
-Then run the app:
-```bash
-# Activate virtual environment
-.\venv\Scripts\Activate.ps1
+2.  **Install the required packages:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-# Run the app
-streamlit run app.py
-```
+## Configuration
 
-### Option 2: Manual Setup
+1.  **Get a Groq API Key**:
+    To use this application, you need a Groq API key. You can get a free key from the [Groq Console](https://console.groq.com/).
 
-```bash
-# Create virtual environment
-python -m venv venv
+2.  **Create a `.env` file**:
+    In the root directory of the project, create a file named `.env` and add your Groq API key:
 
-# Activate virtual environment (Windows)
-venv\Scripts\activate
+    ```
+    GROQ_API_KEY="your-groq-api-key"
+    ```
 
-# Install dependencies
-pip install -r requirements.txt
+## Running the Application
 
-# Run the app
-streamlit run app.py
-```
+You need to run the backend and frontend servers in two separate terminals.
 
-### Option 3: Simple Version (if WebSocket issues persist)
+1.  **Start the Backend (FastAPI)**:
+    Open a terminal and run the following command to start the FastAPI server:
+    ```bash
+    uvicorn backend.main:app --reload
+    ```
+    The backend will be available at `http://127.0.0.1:8000`.
 
-If you continue to have WebSocket issues, try the simplified version:
+2.  **Start the Frontend (Streamlit)**:
+    Open a second terminal and run the following command to start the Streamlit app:
+    ```bash
+    streamlit run streamlit_app.py
+    ```
+    The frontend will be accessible in your browser at `http://localhost:8501`.
 
-```bash
-streamlit run app_simple.py
-```
+## Usage
 
-## 🔧 Troubleshooting
+1.  **Open the application** in your web browser.
+2.  **Upload a PDF file** using the sidebar.
+3.  **Wait for the processing** to complete. You will see a success message.
+4.  **Start chatting** by typing your questions in the input box.
 
-### WebSocket Error Fix
-If you see errors like:
-```
-TypeError: WebSocketHandler.__init__() missing 2 required positional arguments
-```
+## Project Structure
 
-1. **Use the PowerShell script**: Run `fix_websocket.ps1`
-2. **Or manually reinstall**: Delete the `venv` folder and recreate it
-3. **Try the simple version**: Use `app_simple.py` instead
+-   `streamlit_app.py`: The main frontend application file.
+-   `backend/main.py`: The main backend application file with the FastAPI logic.
+-   `requirements.txt`: A list of all the Python packages required.
+-   `data/`: This directory is created automatically to store the FAISS vector indexes for the uploaded PDFs.
 
-### Common Issues
+## API Endpoints
 
-1. **Port already in use**: Change the port with `streamlit run app.py --server.port 8502`
-2. **Memory issues**: The model requires ~1GB RAM. Close other applications if needed
-3. **Slow first run**: The model downloads on first use (~1GB download)
+The FastAPI backend provides the following endpoints:
 
-## 📝 Usage
+-   `POST /upload_pdf`: Upload a PDF file.
+-   `POST /chat`: Send a question and get an answer.
+-   `GET /health`: Check the health of the backend.
+-   `GET /documents`: List all uploaded documents.
+-   `DELETE /documents/{doc_id}`: Delete a specific document.
 
-1. Upload a PDF file
-2. Wait for processing (may take a few minutes on first run)
-3. Ask questions about the PDF content
-4. Get AI-powered answers based on the document
+## Customization
 
-## 🛠️ Technical Details
+You can customize the language model and the embedding model by setting the following environment variables in your `.env` file:
 
-- **Model**: FLAN-T5-Base (1.1B parameters)
-- **Vector Store**: FAISS for efficient similarity search
-- **Embeddings**: Sentence Transformers (all-MiniLM-L6-v2)
-- **Framework**: Streamlit for the web interface
+-   `GROQ_MODEL`: The Groq model to use (e.g., `llama3-8b-8192`).
+-   `HUGGINGFACE_EMBEDDINGS_MODEL`: The Sentence Transformers model to use for embeddings (e.g., `sentence-transformers/all-MiniLM-L6-v2`).
 
-```bash
-git clone https://github.com/your-repo/chat-with-pdf
-cd chat-with-pdf
-pip install -r requirements.txt
-streamlit run app.py
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
